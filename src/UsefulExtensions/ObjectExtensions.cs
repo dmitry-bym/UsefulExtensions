@@ -13,9 +13,4 @@ public static class ObjectExtensions
     {
         return value == null;
     }
-    
-    public static bool IsNotNull([NotNullWhen(true)] this object? value)
-    {
-        return !value.IsNull();
-    }
 }

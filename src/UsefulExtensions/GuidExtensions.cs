@@ -11,16 +11,11 @@ public static class GuidExtensions
     /// <returns>true if the value parameter is null or an empty guid (Guid.Empty); otherwise, false.</returns>
     public static bool IsNullOrEmpty([NotNullWhen(false)] this Guid? value)
     {
-        return value.IsNull() || value == Guid.Empty;
+        return !value.HasValue || value.Value.IsEmpty();
     }
     
-    /// <summary>
-    /// Indicates whether the specified guid is not null or not an empty guid (Guid.Empty).
-    /// </summary>
-    /// <param name="value">guid to test.</param>
-    /// <returns>false if the value parameter is null or an empty guid (Guid.Empty); otherwise, true.</returns>
-    public static bool IsNotNullOrEmpty([NotNullWhen(true)] this Guid? value)
+    public static bool IsEmpty(this Guid value)
     {
-        return !value.IsNullOrEmpty();
+        return value == Guid.Empty;
     }
 }

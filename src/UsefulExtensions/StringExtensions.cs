@@ -13,12 +13,7 @@ public static class StringExtensions
     {
         return string.IsNullOrEmpty(value);
     }
-    
-    public static bool IsNotNullOrEmpty([NotNullWhen(true)] this string? value)
-    {
-        return !value.IsNullOrEmpty();
-    }
-    
+
     /// <summary>
     /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
     /// </summary>
@@ -27,10 +22,5 @@ public static class StringExtensions
     public static bool IsNullOrWhiteSpace([NotNullWhen(false)] this string? value)
     {
         return string.IsNullOrWhiteSpace(value);
-    }
-    
-    public static bool IsNotNullOrWhiteSpace([NotNullWhen(true)] this string? value)
-    {
-        return !value.IsNullOrWhiteSpace();
     }
 }
