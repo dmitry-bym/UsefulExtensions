@@ -1,35 +1,24 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using MoreLinq.Extensions;
 using UsefulExtensions;
 
-var arr = new[] { new ClassA(1), new ClassA(2)};
-var a = new[] { new ClassB(1) , new ClassB(3)};
-var joinResult = arr.Join(a, x => x.id, x => x.id, (i, d) => (i, d));
-var leftJoinResult = arr.LeftJoin(a, x => x.id, x => x.id, (i, d) => (i, d));
-var rightJoinResult = arr.RightJoin(a, x => x.id, x => x.id, (i, d) => (i, d));
+var a = Enum();
 
-arr.Average(x => x.id, x => x.id)
+IEnumerable<int> a;
+a.Batch( )
 
-Console.WriteLine("===========Join===========");
-foreach(var item in joinResult)
+
+
+
+async IAsyncEnumerable<string> Enum()
 {
-    Console.WriteLine(item);
+    await Task.Delay(1000);
+    yield return "str 1";
+    await Task.Delay(1000);
+    yield return "str 2";
+    await Task.Delay(1000);
+    yield return "str 3";
 }
-
-Console.WriteLine("===========Left join===========");
-foreach(var item in leftJoinResult)
-{
-    Console.WriteLine(item);
-}
-Console.WriteLine("===========Right join===========");
-foreach(var item in rightJoinResult)
-{
-    Console.WriteLine(item);
-}
-
-
-public record ClassA(int id);
-
-public record ClassB(int id);
 
 

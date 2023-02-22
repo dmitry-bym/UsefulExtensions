@@ -11,4 +11,9 @@
       <ProjectReference Include="..\src\UsefulExtensions\UsefulExtensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="morelinq" Version="3.3.2" />
+      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    </ItemGroup>
+
 </Project>

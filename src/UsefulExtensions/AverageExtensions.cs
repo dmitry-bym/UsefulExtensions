@@ -4,9 +4,11 @@ namespace UsefulExtensions;
 
 public static class AverageExtensions
 {
-    public static (decimal, decimal) Average<T, TR1, TR2>(this IEnumerable<T> collection, 
+    public static (TR1, TR2) Average<T, TR1, TR2>(this IEnumerable<T> collection, 
         Func<T, TR1> selector1, 
-        Func<T, TR2> selector2) where TR1 : INumberBase<TR1>
+        Func<T, TR2> selector2) 
+        where TR1 : INumberBase<TR1> 
+        where TR2 : INumberBase<TR2>
     {
         var result = AverageInner(collection, selector1, selector2);
         return (result[0], result[1]);
