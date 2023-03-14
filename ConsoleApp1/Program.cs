@@ -3,11 +3,6 @@
 using MoreLinq.Extensions;
 using UsefulExtensions;
 
-var a = Enum();
-
-IEnumerable<int> a;
-a.Batch( )
-
 
 
 

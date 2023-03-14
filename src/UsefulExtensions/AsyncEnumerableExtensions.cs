@@ -90,24 +90,23 @@ public static class AsyncEnumerableExtensions
         }
     }
     
-    public static async IAsyncEnumerable<IAsyncEnumerable<T>> Batch<T>(this IAsyncEnumerable<T> source, int batchSize)
+    public static async IAsyncEnumerable<IEnumerable<T>> Batch<T>(this IAsyncEnumerable<T> source, int batchSize)
     {
         var enumerator = source.GetAsyncEnumerator();
         while (await enumerator.MoveNextAsync())
         {
-            var buffer = new T[batchSize];
-            buffer[0] = enumerator.Current;
+            var buffer = new List<T>(batchSize) { enumerator.Current };
             
             var index = 1;
             while (index < batchSize && await enumerator.MoveNextAsync())
             {
-                buffer[index] = enumerator.Current;
+                buffer.Add(enumerator.Current);
             }
             
             if(index == batchSize)
-                yield return buffer;
+                yield return buffer.AsEnumerable();
             else
-                yield return buffer.Take(index).ToAsyncEnumerable();
+                yield return buffer.Take(index);
         }
     }
 }

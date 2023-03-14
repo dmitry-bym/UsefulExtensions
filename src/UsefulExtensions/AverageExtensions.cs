@@ -7,11 +7,25 @@ public static class AverageExtensions
     public static (TR1, TR2) Average<T, TR1, TR2>(this IEnumerable<T> collection, 
         Func<T, TR1> selector1, 
         Func<T, TR2> selector2) 
-        where TR1 : INumberBase<TR1> 
-        where TR2 : INumberBase<TR2>
+        where TR1 : INumberBase<TR1>, IDivisionOperators<TR1, int, TR1>
+        where TR2 : INumberBase<TR2>, IDivisionOperators<TR2, int, TR2>
     {
-        var result = AverageInner(collection, selector1, selector2);
-        return (result[0], result[1]);
+        using var enumerator =  collection.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentOutOfRangeException(nameof(collection));
+        
+        var sum1 = selector1(enumerator.Current);
+        var sum2 = selector2(enumerator.Current);
+        var count = 1;
+        
+        while (enumerator.MoveNext())
+        {
+            sum1 += selector1(enumerator.Current);
+            sum2 += selector2(enumerator.Current);
+            count++;
+        }
+        
+        return (sum1 / count, sum2 / count);
     }
     
     public static (decimal, decimal, decimal) Average<T>(this IEnumerable<T> collection, 
@@ -45,12 +59,12 @@ public static class AverageExtensions
     }
 
     public static (decimal, decimal, decimal, decimal, decimal, decimal) Average<T, TR1>(this IEnumerable<T> collection, 
-        Func<T, TR1> selector1, 
+        Func<T, decimal> selector1, 
         Func<T, decimal> selector2,
         Func<T, decimal> selector3,
         Func<T, decimal> selector4,
         Func<T, decimal> selector5,
-        Func<T, decimal> selector6) where TR1 : INumberBase<TR1>
+        Func<T, decimal> selector6)
     {
         var result = AverageInner(collection, selector1, selector2, selector3, selector4, selector5, selector6);
         return (result[0], result[1], result[2], result[3], result[4], result[5]);

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benchmark.csproj", "{B429E022-B00C-4695-A02C-ADEFF7C32D97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulExtensions.EnumeratableTuple", "UsefulExtensions.EnumeratableTuple\UsefulExtensions.EnumeratableTuple.csproj", "{43F7F82F-C2C4-46B4-B53F-A68D1326ADFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B429E022-B00C-4695-A02C-ADEFF7C32D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B429E022-B00C-4695-A02C-ADEFF7C32D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B429E022-B00C-4695-A02C-ADEFF7C32D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F7F82F-C2C4-46B4-B53F-A68D1326ADFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F7F82F-C2C4-46B4-B53F-A68D1326ADFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F7F82F-C2C4-46B4-B53F-A68D1326ADFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F7F82F-C2C4-46B4-B53F-A68D1326ADFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
