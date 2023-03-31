@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\src\UsefulExtensions\UsefulExtensions.csproj" />
+      <ProjectReference Include="..\UsefulExtensions.AwaitableTuple\UsefulExtensions.AwaitableTuple.csproj" />
     </ItemGroup>
 
 </Project>

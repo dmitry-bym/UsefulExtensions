@@ -74,7 +74,7 @@ public static class AverageExtensions
     {
         var sums = new decimal[selectors.Length];
         var count = 0;
-
+        //todo try get span
         using (var enumerator =  collection.GetEnumerator())
         {
             while (enumerator.MoveNext())

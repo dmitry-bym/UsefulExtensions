@@ -13,14 +13,4 @@ public static class ObjectExtensions
     {
         return value == null;
     }
-    
-    public static T Cast<T>(this object? value)
-    {
-        return (T)value!;
-    }
-    
-    public static T? As<T>(this object? value) where T : class
-    {
-        return value as T;
-    }
 }

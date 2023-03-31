@@ -1,10 +1,4 @@
-﻿using System.Numerics;
-
-namespace UsefulExtensions;
-
-public static class TupleExtensions
-{
-}
+﻿namespace UsefulExtensions;
 
 public static class DecimalExtensions
 {
@@ -29,26 +23,5 @@ public static class DecimalExtensions
                 yield return result;
             }
         }
-    }
-}
-
-public static class RandomExtensions
-{
-    public static Task Random(this ICollection<Task> z)
-    {
-        return Task.CompletedTask;
-    }
-}
-
-public static class TaskExtensions
-{
-    public static Task WhenAll(this IEnumerable<Task> tasks)
-    {
-        return Task.WhenAll(tasks);
-    }
-    
-    public static Task<Task> WhenAny(this IEnumerable<Task> tasks)
-    {
-        return Task.WhenAny(tasks);
     }
 }

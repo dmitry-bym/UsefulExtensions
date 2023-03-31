@@ -1,34 +1,49 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using UsefulExtensions;
+using UsefulExtensions.AwaitableTuple;
 
 BenchmarkRunner.Run<Md5VsSha256>();
 
+[MemoryDiagnoser]
 public class Md5VsSha256
 {
     private const int N = 10000;
-    private readonly TestData[] data;
 
-    public Md5VsSha256()
+
+    private (int, int) data;
+    
+    [Params(100, 10_000, 100_000_000)]
+    public int dataTo;
+    
+    [GlobalSetup]
+    public void Setup()
     {
-        var random = new Random();
-        data = new TestData[N];
-        for (int i = 0; i < N; i++)
+        data = (0, dataTo);
+    }
+
+    [Benchmark]
+    public void Range()
+    {
+        var enumerable = data.Range();
+        foreach (var d in enumerable)
         {
-            var num1 = (decimal)random.NextDouble();
-            var num2 = (decimal)random.NextDouble();
-            var num3 = (decimal)random.NextDouble();
-            var num4 = (decimal)random.NextDouble();
-            data[i] = new TestData(num1, num2, num3, num4);
+            Do(d);
         }
     }
-    [Benchmark]
-    public (decimal, decimal, decimal, decimal) AverageStandard() => (data.Average(x => x.Value1), data.Average(x => x.Value2), data.Average(x => x.Value3), data.Average(x => x.Value4));
 
     [Benchmark]
-    public (decimal, decimal, decimal, decimal) AverageUseful() => data.Average(x => x.Value1, x => x.Value2, x => x.Value3, x => x.Value4);
+    public void EnumRange()
+    {
+        var enumerable = Enumerable.Range(data.Item1, data.Item2);
+        foreach (var d in enumerable)
+        {
+            Do(d);
+        }
+    }
 
-    public record TestData(decimal Value1, decimal Value2, decimal Value3, decimal Value4);
+    public void Do(int d) {}
 }
