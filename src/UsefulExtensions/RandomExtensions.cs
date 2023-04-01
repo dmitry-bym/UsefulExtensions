@@ -1,65 +1,75 @@
-﻿using System.Collections;
+﻿using UsefulExtensions.Span;
 
 namespace UsefulExtensions;
 
 public static class RandomExtensions
 {
-    public static ICollection<T> Random<T>(this ICollection<T> z)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
     {
-        ICollection<>
+        if (source is T[] arr)
+        {
+            var buffer = new T[arr.Length];
+            var span = buffer.AsSpan();
+            arr.CopyTo(span);
+            Shuffle(span);
+            
+            return buffer;
+        }
+        else
+        {
+            var buffer = source.ToArray();
+            Shuffle(buffer);
+            return buffer;
+        }
     }
-}
 
-internal class CountableEnumerable<T> : ICollection<T>
-{
-    private readonly IEnumerable<T> _enumerable;
+    private static void Shuffle<T>(Span<T> array)
+    {
+        var random = RandomHelper.Random;
+        for (int i = array.Length; i > 1; i--)
+        {
+            int j = random.Next(i);
+            (array[j], array[i - 1]) = (array[i - 1], array[j]);
+        }
+    }
     
-    public CountableEnumerable(IEnumerable<T> enumerable, int count)
+    public static IEnumerable<T> Random<T>(this IEnumerable<T> source, int howMany)
     {
-        _enumerable = enumerable;
-        Count = count;
-    }
-    public IEnumerator<T> GetEnumerator()
-    {
-        return _enumerable.GetEnumerator();
-    }
+        // ReSharper disable once PossibleMultipleEnumeration
+        if (source.TryGetSpan(out var span))
+        {
+            var seq = RandomHelper.RandomSequenceArr(0, span.Length, howMany);
+            foreach (var rand in seq)
+            {
+                yield return span[rand];
+            }
+            yield break;
+        }
+        
+        if (source.TryGetNonEnumeratedCount(out var count))
+        {
+            var seq = RandomHelper.RandomSequenceArr(0, count, howMany);
+            var elemNum = 0;
+            foreach (var rand in seq)
+            {
+                // ReSharper disable once PossibleMultipleEnumeration
+                foreach (var elem in source)
+                {
+                    if (elemNum == rand)
+                        yield return elem;
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+                    elemNum++;
+                }
+            }
+            yield break;
+        }
+
+        // ReSharper disable once PossibleMultipleEnumeration
+        var array = source.ToArray();
+        var sequence = RandomHelper.RandomSequenceArr(0, array.Length, howMany);
+        foreach (var rand in sequence)
+        {
+            yield return array[rand];
+        }
     }
-
-    public void Add(T item)
-    {
-        throw new NotSupportedException();
-    }
-
-    public void Clear()
-    {
-        throw new NotSupportedException();
-    }
-
-    public bool Contains(T item)
-    {
-        throw new NotSupportedException();
-    }
-
-    public void CopyTo(T[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Remove(T item)
-    {
-        throw new NotSupportedException();
-    }
-
-    public int Count { get; }
-    
-    public bool IsReadOnly => true;
-}
-
-internal static class RandomHelper
-{
-    public static Random Random { get; set; } = new();
 }

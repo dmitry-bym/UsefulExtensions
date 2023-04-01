@@ -5,17 +5,17 @@ namespace UsefulExtensions;
 
 internal static class RangeHelper
 {
-    internal static IIterator<T> Range<T>(T start, T end) where T : INumber<T>
+    internal static Iterator<T> Range<T>(T start, T end) where T : INumber<T>
     {
         return new RangeIterator<T>(start, end, T.One);
     }
     
-    internal static IIterator<T> Range<T>(T start, T end, T step) where T : INumber<T>
+    internal static Iterator<T> Range<T>(T start, T end, T step) where T : INumber<T>
     {
         return new RangeIterator<T>(start, end, step);
     }
 
-    private class RangeIterator<T> : IIterator<T> where T : INumber<T>
+    private class RangeIterator<T> : Iterator<T> where T : INumber<T>
     {
         private readonly T _start;
         private readonly T _end;
@@ -30,7 +30,7 @@ internal static class RangeHelper
             _innerCurrent = start;
         }
         
-        public bool MoveNext()
+        public override bool MoveNext()
         {
             //if _start == _end return false
             if (_start >= _end && _innerCurrent <= _end)
@@ -42,28 +42,6 @@ internal static class RangeHelper
             Current = _innerCurrent;
             _innerCurrent += _step;
             return true;
-        }
-
-        public void Reset()
-        {
-            _innerCurrent = _start;
-        }
-
-        public T? Current { get; private set; }
-
-        object? IEnumerator.Current => Current;
-
-        public void Dispose()
-        { }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return this;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
     

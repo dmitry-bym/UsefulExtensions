@@ -6,11 +6,6 @@ public static class CollectionExtensions
     {
         return collection.Count == 0;
     }
-    
-    public static bool IsNotEmpty<T>(this ICollection<T> collection)
-    {
-        return !collection.IsEmpty();
-    }
 
     public static void AddRangeIf<T>(this ICollection<T> collection, IEnumerable<T> elements, Func<T, bool> predicate)
     {

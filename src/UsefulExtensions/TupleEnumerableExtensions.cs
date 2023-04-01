@@ -9,7 +9,8 @@ public static class TupleEnumerableExtensions
     /// </summary>
     /// <param name="tuple"></param>
     /// <returns></returns>
-    public static IEnumerable<int> Range(this (int Start, int End) tuple)
+    public static IEnumerable<T> Range<T>(this (T Start, T End) tuple)
+        where T : INumber<T>
     {
         return RangeHelper.Range(tuple.Start, tuple.End);
     }
