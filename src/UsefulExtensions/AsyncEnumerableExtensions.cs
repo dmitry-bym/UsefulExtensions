@@ -1,9 +1,23 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace UsefulExtensions;
+﻿namespace UsefulExtensions;
 
 public static class AsyncEnumerableExtensions
 {
+    public static async IAsyncEnumerable<T> ToAsyncEnumerable<T>(this IEnumerable<Task<T>> source)
+    {
+        foreach (var task in source)
+        {
+            yield return await task;
+        }
+    }
+
+    public static async IAsyncEnumerable<T> ToAsyncEnumerable<T>(this IEnumerable<ValueTask<T>> source)
+    {
+        foreach (var task in source)
+        {
+            yield return await task;
+        }
+    }
+
     public static async IAsyncEnumerable<T> Where<T>(this IAsyncEnumerable<T> source, Func<T, bool> predicate)
     {
         await foreach (var elem in source)
@@ -12,27 +26,30 @@ public static class AsyncEnumerableExtensions
                 yield return elem;
         }
     }
-    
-    public static async IAsyncEnumerable<TResult> Select<T, TResult>(this IAsyncEnumerable<T> source, Func<T, TResult> selector)
-    {
-        await foreach (var elem in source)
-        { 
-            yield return selector(elem);
-        }
-    }
-    
-    public static async IAsyncEnumerable<TResult> SelectMany<T, TResult>(this IAsyncEnumerable<T> source, Func<T, IEnumerable<TResult>> selector)
+
+    public static async IAsyncEnumerable<TResult> Select<T, TResult>(this IAsyncEnumerable<T> source,
+        Func<T, TResult> selector)
     {
         await foreach (var elem in source)
         {
-            foreach (var result in selector(elem))
+            yield return selector(elem);
+        }
+    }
+
+    public static async IAsyncEnumerable<TResult> SelectMany<T, TResult>(this IAsyncEnumerable<IEnumerable<T>> source,
+        Func<T, TResult> selector)
+    {
+        await foreach (var elem in source)
+        {
+            foreach (var result in elem)
             {
-                yield return result;
+                yield return selector(result);
             }
         }
     }
-    
-    public static async IAsyncEnumerable<(T1, T2)> Zip<T1, T2>(this IAsyncEnumerable<T1> source,  IAsyncEnumerable<T2> source2)
+
+    public static async IAsyncEnumerable<(T1, T2)> Zip<T1, T2>(this IAsyncEnumerable<T1> source,
+        IAsyncEnumerable<T2> source2)
     {
         var enumerator1 = source.GetAsyncEnumerator();
         var enumerator2 = source2.GetAsyncEnumerator();
@@ -42,7 +59,7 @@ public static class AsyncEnumerableExtensions
             yield return (enumerator1.Current, enumerator2.Current);
         }
     }
-    
+
     public static async IAsyncEnumerable<T> Take<T>(this IAsyncEnumerable<T> source, int count)
     {
         var enumerator = source.GetAsyncEnumerator();
@@ -52,7 +69,7 @@ public static class AsyncEnumerableExtensions
             count--;
         }
     }
-    
+
     public static async IAsyncEnumerable<T> Skip<T>(this IAsyncEnumerable<T> source, int count)
     {
         var enumerator = source.GetAsyncEnumerator();
@@ -60,14 +77,15 @@ public static class AsyncEnumerableExtensions
         {
             count--;
         }
-        
+
         while (await enumerator.MoveNextAsync())
         {
             yield return enumerator.Current;
         }
     }
-    
-    public static async IAsyncEnumerable<T> Distinct<T>(this IAsyncEnumerable<T> source, IEqualityComparer<T>? comparer = null)
+
+    public static async IAsyncEnumerable<T> Distinct<T>(this IAsyncEnumerable<T> source,
+        IEqualityComparer<T>? comparer = null)
     {
         var set = new HashSet<T>(comparer);
         await foreach (var elem in source)
@@ -77,36 +95,39 @@ public static class AsyncEnumerableExtensions
         }
     }
     
-    public static async IAsyncEnumerable<T> Concat<T>(this IAsyncEnumerable<T> source, IAsyncEnumerable<T> source2)
+    public static async IAsyncEnumerable<T> Concat<T>(this IAsyncEnumerable<T> source, params IAsyncEnumerable<T>[] sources)
     {
         await foreach (var elem in source)
         {
             yield return elem;
         }
-        
-        await foreach (var elem in source2)
+
+        foreach (var enumerable in sources)
         {
-            yield return elem;
+            await foreach (var elem in enumerable)
+            {
+                yield return elem;
+            }
         }
     }
     
-    public static async IAsyncEnumerable<IEnumerable<T>> Batch<T>(this IAsyncEnumerable<T> source, int batchSize)
+    public static async IAsyncEnumerable<IAsyncEnumerable<T>> Batch<T>(this IAsyncEnumerable<T> source, int batchSize)
     {
         var enumerator = source.GetAsyncEnumerator();
         while (await enumerator.MoveNextAsync())
         {
-            var buffer = new List<T>(batchSize) { enumerator.Current };
-            
-            var index = 1;
-            while (index < batchSize && await enumerator.MoveNextAsync())
+            yield return BatchInner(enumerator, batchSize);
+        }
+
+        static async IAsyncEnumerable<T> BatchInner(IAsyncEnumerator<T> asyncEnumerable, int size)
+        {
+            yield return asyncEnumerable.Current;
+            var currentSize = 1;
+            while (currentSize < size && await asyncEnumerable.MoveNextAsync())
             {
-                buffer.Add(enumerator.Current);
+                yield return asyncEnumerable.Current;
+                currentSize++;
             }
-            
-            if(index == batchSize)
-                yield return buffer.AsEnumerable();
-            else
-                yield return buffer.Take(index);
         }
     }
 }

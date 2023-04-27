@@ -2,7 +2,7 @@
 
 namespace UsefulExtensions;
 
-internal abstract class Iterator<T> : IEnumerator<T>, IEnumerable<T>
+public abstract class Iterator<T> : IEnumerator<T>, IEnumerable<T>
 {
     public abstract bool MoveNext();
 

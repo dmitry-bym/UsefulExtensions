@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace UsefulExtensions;
+namespace UsefulExtensions.Core;
 
-internal static class RangeHelper
+public static class RangeHelper
 {
-    internal static Iterator<T> Range<T>(T start, T end) where T : INumber<T>
+    public static Iterator<T> Range<T>(T start, T end) where T : INumber<T>
     {
         return new RangeIterator<T>(start, end, T.One);
     }
     
-    internal static Iterator<T> Range<T>(T start, T end, T step) where T : INumber<T>
+    public static Iterator<T> Range<T>(T start, T end, T step) where T : INumber<T>
     {
         return new RangeIterator<T>(start, end, step);
     }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-
-namespace UsefulExtensions.AwaitableTuple;
+﻿namespace UsefulExtensions;
 
 public static partial class TupleAwaitableExtensions
 {

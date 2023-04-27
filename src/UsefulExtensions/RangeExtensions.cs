@@ -16,6 +16,6 @@ public static class RangeExtensions
             false => range.End.Value
         };
 
-        return RangeHelper.Range(start, end);
+        return Enumerable.Range(start, end);
     }
 }

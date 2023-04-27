@@ -8,20 +8,7 @@ public static class RandomHelper
     {
         return new RandomIterator(Random, min, max, count);
     }
-    
-    public static int[] RandomSequenceArr(int min, int max, int count)
-    {
-        var r = new HashSet<int>(count);
-        for (int i = 0; i < count; i++)
-        {
-            var n = Random.Next(min, max);
-            if (!r.Add(n))
-                i--;
-        }
 
-        return r.Order().ToArray();
-    }
-    
     private class RandomIterator : Iterator<int>
     {
         //todo wtf fix everything

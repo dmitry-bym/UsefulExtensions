@@ -1,6 +1,6 @@
-﻿namespace UsefulExtensions.AwaitableTuple;
+﻿namespace UsefulExtensions;
 
-public partial class TupleAwaitableExtensions
+public static partial class TupleAwaitableExtensions
 {
     public static Task<Task> WhenAny<T1, T2>(this (Task<T1>, Task<T2>) tuple)
     {

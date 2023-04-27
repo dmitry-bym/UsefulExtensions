@@ -1,9 +1,21 @@
 ﻿using System.Numerics;
+using UsefulExtensions.Core;
 
+// ReSharper disable once CheckNamespace
 namespace UsefulExtensions;
 
 public static class TupleEnumerableExtensions
 {
+    /// <summary>
+    /// Start inclusive. End exclusive
+    /// </summary>
+    /// <param name="tuple"></param>
+    /// <returns></returns>
+    public static IEnumerable<int> Range(this (int Start, int End) tuple)
+    {
+        return Enumerable.Range(tuple.Start, tuple.End);
+    }
+    
     /// <summary>
     /// Start inclusive. End exclusive
     /// </summary>

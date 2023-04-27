@@ -11,7 +11,7 @@ public static class GuidExtensions
     /// <returns>true if the value parameter is null or an empty guid (Guid.Empty); otherwise, false.</returns>
     public static bool IsNullOrEmpty([NotNullWhen(false)] this Guid? value)
     {
-        return !value.HasValue || value.Value.IsEmpty();
+        return value.IsNull() || value.Value.IsEmpty();
     }
     
     public static bool IsEmpty(this Guid value)
