@@ -11,9 +11,9 @@ public static class TupleEnumerableExtensions
     /// </summary>
     /// <param name="tuple"></param>
     /// <returns></returns>
-    public static IEnumerable<int> Range(this (int Start, int End) tuple)
+    public static IEnumerable<int> Range(this (int Start, int Count) tuple)
     {
-        return Enumerable.Range(tuple.Start, tuple.End);
+        return Enumerable.Range(tuple.Start, tuple.Count);
     }
     
     /// <summary>
@@ -21,10 +21,10 @@ public static class TupleEnumerableExtensions
     /// </summary>
     /// <param name="tuple"></param>
     /// <returns></returns>
-    public static IEnumerable<T> Range<T>(this (T Start, T End) tuple)
+    public static IEnumerable<T> Range<T>(this (T Start, int Count) tuple)
         where T : INumber<T>
     {
-        return RangeHelper.Range(tuple.Start, tuple.End);
+        return RangeHelper.Range(tuple.Start, tuple.Count);
     }
 
     /// <summary>
@@ -32,9 +32,9 @@ public static class TupleEnumerableExtensions
     /// </summary>
     /// <param name="tuple"></param>
     /// <returns></returns>
-    public static IEnumerable<T> Range<T>(this (T Start, T End, T Step) tuple)
+    public static IEnumerable<T> Range<T>(this (T Start, int Count, T Step) tuple)
         where T : INumber<T>
     {
-        return RangeHelper.Range(tuple.Start, tuple.End, tuple.Step);
+        return RangeHelper.Range(tuple.Start, tuple.Count, tuple.Step);
     }
 }

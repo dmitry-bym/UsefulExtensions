@@ -4,42 +4,37 @@ namespace UsefulExtensions.Core;
 
 public static class RangeHelper
 {
-    public static Iterator<T> Range<T>(T start, T end) where T : INumber<T>
+    public static Iterator<T> Range<T>(T start, int count) where T : INumber<T>
     {
-        return new RangeIterator<T>(start, end, T.One);
+        return new RangeIterator<T>(start, count, T.One);
     }
     
-    public static Iterator<T> Range<T>(T start, T end, T step) where T : INumber<T>
+    public static Iterator<T> Range<T>(T start, int count, T step) where T : INumber<T>
     {
-        return new RangeIterator<T>(start, end, step);
+        return new RangeIterator<T>(start, count, step);
     }
 
     private class RangeIterator<T> : Iterator<T> where T : INumber<T>
     {
-        private readonly T _start;
-        private readonly T _end;
+        private int _count;
         private readonly T _step;
         private T _innerCurrent;
         
-        public RangeIterator(T start, T end, T step)
+        public RangeIterator(T start, int count, T step)
         {
-            _start = start;
-            _end = end;
+            _count = count;
             _step = step;
             _innerCurrent = start;
         }
         
         public override bool MoveNext()
         {
-            //if _start == _end return false
-            if (_start >= _end && _innerCurrent <= _end)
-                return false;
-
-            if (_start < _end && _innerCurrent >= _end)
+            if (_count == 0)
                 return false;
             
             Current = _innerCurrent;
             _innerCurrent += _step;
+            _count--;
             return true;
         }
     }

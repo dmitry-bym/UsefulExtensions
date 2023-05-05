@@ -1,8 +1,10 @@
-﻿namespace UsefulExtensions;
+﻿using System.Numerics;
+
+namespace UsefulExtensions;
 
 public static class DecimalExtensions
 {
-    public static IEnumerable<int> DivideAndDistributeRemainder(this int dividend, int divider)
+    public static IEnumerable<T> DivideAndDistributeRemainder<T>(this T dividend, T divider) where T : INumber<T>
     {
         if (divider == default)
         {
@@ -12,12 +14,12 @@ public static class DecimalExtensions
         var rest = dividend % divider;
         var result = dividend / divider;
 
-        for (int i = 0; i < divider; i++)
+        for (var i = T.Zero; i < divider; i++)
         {
-            if (rest > 0)
+            if (rest > T.Zero)
             {
                 rest--;
-                yield return result + 1;
+                yield return result + T.One;
             } else
             {
                 yield return result;

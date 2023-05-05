@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using UsefulExtensions.Core;
 
 namespace UsefulExtensions;
 
@@ -22,5 +23,10 @@ public static class ObjectExtensions
     public static bool IsNull<T>([NotNullWhen(false)] this T? value) where T : struct
     {
         return !value.HasValue;
+    }
+    
+    public static bool IsEmpty<T>(this T value) where T : IHasEmpty<T>
+    {
+        return T.Empty.Equals(value);
     }
 }
